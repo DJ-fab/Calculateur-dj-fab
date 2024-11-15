@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculateur DJ Fab</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            color: white;
+            text-align: center;
+        }
+        .background-image {
+            background-image: url('background.jpg');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+        .content {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            display: inline-block;
+            text-align: left;
+            margin: 20px auto;
+            width: 90%;
+            max-width: 400px;
+        }
+        h1, h2 {
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        }
+        label, input, select {
+            display: block;
+            margin: 10px 0;
+            width: 100%;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Page d'accueil -->
+    <div id="home" class="background-image">
+        <div>
+            <h1>Bienvenue dans le calculateur de tarifs DJ Fab</h1>
+            <button onclick="showSection('serviceDJ')">Service DJ</button>
+            <button onclick="showSection('location')">Location Matériel</button>
+            <button onclick="showSection('both')">DJ + Matériel</button>
+        </div>
+    </div>
+
+    <!-- Section Service DJ -->
+    <div id="serviceDJ" class="hidden">
+        <video class="video-background" autoplay loop muted>
+            <source src="31377-386628887_small.mp4" type="video/mp4">
+        </video>
+        <div class="content">
+            <h2>Service DJ</h2>
+            <form id="djForm">
+                <label for="event">Nom de l'événement :</label>
+                <input type="text" id="event" name="event" required>
+
+                <label for="date">Date de l'événement :</label>
+                <input type="date" id="date" name="date" required>
+
+                <label for="duration">Durée (en heures) :</label>
+                <input type="number" id="duration" name="duration" placeholder="Entrez la durée" required>
+
+                <label for="isBigEvent">Grand événement :</label>
+                <select id="isBigEvent" name="isBigEvent" required>
+                    <option value="oui">Oui</option>
+                    <option value="non">Non</option>
+                </select>
+
+                <button type="button" onclick="sendDJ()">Envoyer</button>
+            </form>
+            <button onclick="goHome()">Retour</button>
+        </div>
+    </div>
+
+    <!-- Section Location Matériel -->
+    <div id="location" class="hidden">
+        <video class="video-background" autoplay loop muted>
+            <source src="31377-386628887_small.mp4" type="video/mp4">
+        </video>
+        <div class="content">
+            <h2>Location de Matériel</h2>
+            <form id="locationForm">
+                <label for="fromDate">Date de début :</label>
+                <input type="date" id="fromDate" name="fromDate" required>
+
+                <label for="toDate">Date de fin :</label>
+                <input type="date" id="toDate" name="toDate" required>
+
+                <label for="email">Adresse email :</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="phone">Numéro de téléphone :</label>
+                <input type="tel" id="phone" name="phone" required>
+
+                <button type="button" onclick="sendLocation()">Envoyer</button>
+            </form>
+            <button onclick="goHome()">Retour</button>
+        </div>
+    </div>
+
+    <!-- Section DJ + Matériel -->
+    <div id="both" class="hidden">
+        <video class="video-background" autoplay loop muted>
+            <source src="31377-386628887_small.mp4" type="video/mp4">
+        </video>
+        <div class="content">
+            <h2>DJ + Matériel</h2>
+            <form id="bothForm">
+                <label for="eventBoth">Nom de l'événement :</label>
+                <input type="text" id="eventBoth" name="eventBoth" required>
+
+                <label for="dateBoth">Date de l'événement :</label>
+                <input type="date" id="dateBoth" name="dateBoth" required>
+
+                <label for="durationBoth">Durée (en heures) :</label>
+                <input type="number" id="durationBoth" name="durationBoth" required>
+
+                <label for="isBigEventBoth">Grand événement :</label>
+                <select id="isBigEventBoth" name="isBigEventBoth" required>
+                    <option value="oui">Oui</option>
+                    <option value="non">Non</option>
+                </select>
+
+                <label for="fromDateBoth">Date de début de location :</label>
+                <input type="date" id="fromDateBoth" name="fromDateBoth" required>
+
+                <label for="toDateBoth">Date de fin de location :</label>
+                <input type="date" id="toDateBoth" name="toDateBoth" required>
+
+                <button type="button" onclick="sendBoth()">Envoyer</button>
+            </form>
+            <button onclick="goHome()">Retour</button>
+        </div>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            document.getElementById('home').classList.add('hidden');
+            document.getElementById(sectionId).classList.remove('hidden');
+        }
+
+        function goHome() {
+            document.querySelectorAll('.hidden').forEach(section => section.classList.add('hidden'));
+            document.getElementById('home').classList.remove('hidden');
+        }
+
+        function sendDJ() {
+            alert('Envoyer les détails pour le service DJ.');
+        }
+
+        function sendLocation() {
+            alert('Envoyer les détails pour la location de matériel.');
+        }
+
+        function sendBoth() {
+            alert('Envoyer les détails pour DJ + Matériel.');
+        }
+    </script>
+</body>
+</html>
